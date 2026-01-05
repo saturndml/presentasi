@@ -38,17 +38,23 @@ iframe#player {
   font-size: 14px;
   cursor: pointer;
 }
+
+.controls button:hover {
+  opacity: 0.85;
+}
 </style>
 </head>
 
 <body>
 
+<!-- ===== GOOGLE SLIDES EMBED ===== -->
 <iframe
   id="player"
-  src="https://docs.google.com/presentation/d/1i437dREULHOBRBA74miScV34dTrWGFhu/embed?start=true&loop=false&delayms=3000"
+  src="https://docs.google.com/presentation/d/1oeqAs0dcRoC5xGYQiAO1wOO52bvR9kkm/embed?start=true&loop=false&delayms=3000"
   allowfullscreen>
 </iframe>
 
+<!-- ===== CONTROLS ===== -->
 <div class="controls">
   <button onclick="prevSlide()">◀ Prev</button>
   <button onclick="pauseSlides()">⏸ Pause</button>
@@ -58,24 +64,26 @@ iframe#player {
 <script>
 const iframe = document.getElementById('player');
 
-// NOTE: Google Slides embed *does not support* postMessage for next/prev
-// But we can reload with params to control auto advance
+/*
+  CATATAN JUJUR:
+  Google Slides embed TIDAK menyediakan API resmi
+  untuk next / prev / pause seperti video player.
+  Jadi ini adalah pendekatan paling aman via reload iframe.
+*/
 
 function nextSlide() {
-  iframe.src = iframe.src + "&slide=id.p" + (new Date().getTime());
+  iframe.src = iframe.src.split('&slide=')[0] + '&slide=' + Date.now();
 }
 
 function prevSlide() {
-  // Google embed tidak support prev via API
-  alert("Prev tidak didukung pada embed Google Slides.");
+  alert("Prev tidak didukung oleh Google Slides embed.");
 }
 
 function pauseSlides() {
-  // Untuk pause, hapus start parameter
   iframe.src = iframe.src.replace("start=true", "start=false");
 }
 
-/* Optional Fullscreen */
+/* AUTO FULLSCREEN (akan aktif jika browser mengizinkan) */
 document.documentElement.requestFullscreen?.();
 </script>
 
